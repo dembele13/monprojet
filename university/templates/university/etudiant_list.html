@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des étudiants</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0e7ef;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #1e3c5c;
+        }
+        .btn {
+            background: #1e3c5c;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #14304a;
+        }
+        nav {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: #1e3c5c;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        nav a:hover {
+            border-bottom-color: #1e3c5c;
+        }
+        .student-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 12px;
+        }
+        .student-item {
+            background: #f9fcff;
+            border: 1px solid #dde5ed;
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: box-shadow 0.2s;
+        }
+        .student-item:hover {
+            box-shadow: 0 4px 12px rgba(0,30,60,0.1);
+        }
+        .student-info {
+            font-size: 1.1rem;
+        }
+        .student-info strong {
+            color: #0b2a40;
+        }
+        .student-actions a {
+            margin-left: 16px;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .edit-link {
+            background: #ffc107;
+            color: #333;
+        }
+        .edit-link:hover {
+            background: #e0a800;
+        }
+        .delete-link {
+            background: #dc3545;
+            color: white;
+        }
+        .delete-link:hover {
+            background: #bb2d3b;
+        }
+        .empty-msg {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 40px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            border-top: 1px solid #e0e7ef;
+            padding-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Liste des étudiants</h1>
+            <a href="{% url 'university:etudiant_create' %}" class="btn">+ Ajouter un étudiant</a>
+        </header>
+
+        <nav>
+            <a href="{% url 'university:cours_list' %}">📖 Voir les cours</a>
+            <a href="{% url 'university:enseignant_list' %}">👨‍🏫 Voir les enseignants</a>
+            <a href="{% url 'university:etudiant_list' %}">🎓 Voir les étudiants</a>
+            <!-- Remplacez l'URL du tableau de bord si nécessaire -->
+            <a href="/">🏠 Accueil</a>
+        </nav>
+
+        <main>
+            {% if etudiants %}
+                <ul class="student-list">
+                    {% for etudiant in etudiants %}
+                        <li class="student-item">
+                            <div class="student-info">
+                                <strong>{{ etudiant.nom }} {{ etudiant.prenom }}</strong>
+                                <span style="color: #2c7da0;">({{ etudiant.numens }})</span>
+                            </div>
+                            <div class="student-actions">
+                                <a href="{% url 'university:etudiant_update' etudiant.pk %}" class="edit-link">✏️ Modifier</a>
+                                <a href="{% url 'university:etudiant_delete' etudiant.pk %}" class="delete-link" onclick="return confirm('Supprimer cet étudiant ?');">🗑️ Supprimer</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="empty-msg">
+                    Aucun étudiant pour le moment.
+                </div>
+            {% endif %}
+        </main>
+
+        <footer>
+            <p>Application de gestion universitaire — © 2025</p>
+        </footer>
+    </div>
+</body>
+</html>
