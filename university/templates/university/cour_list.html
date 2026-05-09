@@ -3,219 +3,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des enseignants</title>
+    <title>Liste des Cours - Gestion Universitaire</title>
     <!-- Bootstrap 5 CSS (CDN) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts pour une typographie plus agréable -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            padding-top: 30px;
-            padding-bottom: 30px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
         .container-custom {
             max-width: 900px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            animation: fadeIn 0.3s ease-in;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
         h1 {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 24px;
-            font-size: 2.2rem;
-            border-left: 6px solid #3498db;
-            padding-left: 20px;
+            font-weight: 700;
+            color: #1a202c;
+            font-size: clamp(1.8rem, 5vw, 2.4rem);
+            border-left: 5px solid #3498db;
+            padding-left: 16px;
+            margin: 0;
         }
+
+        /* Bouton Ajouter */
         .btn-add {
-            background-color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2980b9);
             border: none;
-            border-radius: 50px;
-            padding: 12px 28px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(52,152,219,0.3);
-            transition: all 0.2s;
-            margin-bottom: 30px;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            white-space: nowrap;
         }
+
         .btn-add:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(52,152,219,0.4);
+            background: linear-gradient(135deg, #2980b9, #1f618d);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            color: white;
         }
-        .btn-add i {
-            margin-right: 8px;
+
+        .btn-add:active {
+            transform: translateY(-1px);
         }
-        .enseignant-card {
+
+        .btn-add:focus {
+            outline: 2px solid #3498db;
+            outline-offset: 2px;
+        }
+
+        /* Liste des cours */
+        .cours-list {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .cours-card {
             background: white;
-            border: none;
+            border: 1px solid #e2e8f0;
             border-radius: 16px;
-            padding: 20px 25px;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 24px;
+            margin-bottom: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
+            gap: 20px;
         }
-        .enseignant-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.05);
-            border-color: #e9ecef;
+
+        .cours-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+            border-color: #3498db;
         }
-        .enseignant-info {
+
+        .cours-info {
             display: flex;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 16px;
+            flex: 1;
+            min-width: 250px;
         }
-        .enseignant-avatar {
-            width: 50px;
-            height: 50px;
+
+        .cours-avatar {
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, #3498db, #9b59b6);
-            border-radius: 50%;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 600;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 10px rgba(52,152,219,0.2);
-        }
-        .enseignant-nom {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1.3rem;
-            color: #2c3e50;
-            margin-right: 10px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+            flex-shrink: 0;
         }
-        .enseignant-numens {
+
+        .cours-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .cours-nom {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1a202c;
+            line-height: 1.4;
+        }
+
+        .cours-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .cours-badge {
             background: #ecf0f1;
-            padding: 5px 12px;
-            border-radius: 30px;
+            padding: 6px 14px;
+            border-radius: 20px;
             font-size: 0.85rem;
-            color: #7f8c8d;
+            color: #555;
             font-weight: 500;
+            display: inline-block;
         }
+
+        .cours-badge.numens {
+            background: #e8f4f8;
+            color: #2980b9;
+            font-weight: 600;
+        }
+
+        /* Actions */
         .btn-actions {
             display: flex;
-            gap: 10px;
-        }
-        .btn-modifier {
-            background-color: #f1c40f;
-            border: none;
-            border-radius: 30px;
-            padding: 8px 20px;
-            color: #2c3e50;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-        .btn-modifier:hover {
-            background-color: #e0b50e;
-            color: #2c3e50;
-        }
-        .btn-supprimer {
-            background-color: #e74c3c;
-            border: none;
-            border-radius: 30px;
-            padding: 8px 20px;
-            color: white;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-        .btn-supprimer:hover {
-            background-color: #c0392b;
-            color: white;
-        }
-        .empty-msg {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 40px;
-            text-align: center;
-            color: #95a5a6;
-            font-size: 1.2rem;
-            border: 2px dashed #dde2e6;
-        }
-        .nav-links {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #ecf0f1;
-            display: flex;
-            gap: 20px;
-            justify-content: center;
+            gap: 8px;
             flex-wrap: wrap;
         }
-        .nav-link-custom {
+
+        .btn-action {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 18px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .btn-action:focus {
+            outline: 2px solid currentColor;
+            outline-offset: 2px;
+        }
+
+        .btn-modifier {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffc107;
+        }
+
+        .btn-modifier:hover {
+            background: #ffc107;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .btn-supprimer {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .btn-supprimer:hover {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+            text-decoration: none;
+        }
+
+        /* Message vide */
+        .empty-state {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 60px 30px;
+            text-align: center;
+            border: 2px dashed #dee2e6;
+            margin-bottom: 32px;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            color: #868e96;
+            font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        .empty-state .btn-add {
+            margin-top: 16px;
+        }
+
+        /* Navigation footer */
+        .nav-section {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .nav-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-link {
             background: white;
             color: #3498db;
             border: 2px solid #3498db;
-            border-radius: 40px;
-            padding: 10px 28px;
+            border-radius: 12px;
+            padding: 12px 24px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
         }
-        .nav-link-custom:hover {
+
+        .nav-link:hover {
             background: #3498db;
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
         }
-        a {
-            text-decoration: none;
+
+        .nav-link:focus {
+            outline: 2px solid #2980b9;
+            outline-offset: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container-custom {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .header-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-add {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .cours-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-actions {
+                width: 100%;
+            }
+
+            .btn-action {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Modal de confirmation (intégré) */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #e9ecef;
+            padding: 24px;
+        }
+
+        .modal-title {
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .modal-body {
+            padding: 24px;
+            color: #495057;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 16px 24px;
         }
     </style>
 </head>
 <body>
     <div class="container-custom">
-        <h1>👨‍🏫 Enseignants</h1>
-        
-        <a href="{% url 'university:enseignant_create' %}" class="btn btn-add text-white">
-            <i>➕</i> Ajouter un enseignant
-        </a>
+        <!-- Header avec titre et bouton ajouter -->
+        <div class="header-section">
+            <h1>👨‍🏫 Gestion des Cours</h1>
+            <a href="{% url 'university:cours_create' %}" class="btn-add">
+                <span>➕</span>
+                <span>Ajouter un cours</span>
+            </a>
+        </div>
 
-        <ul class="list-unstyled">
-            {% for enseignant in enseignants %}
-                <li class="enseignant-card">
-                    <div class="enseignant-info">
-                        <div class="enseignant-avatar">
-                            {{ enseignant.prenom|first|upper }}{{ enseignant.nom|first|upper }}
+        <!-- Liste des cours -->
+        {% if cours %}
+            <ul class="cours-list">
+                {% for cour in cours %}
+                    <li class="cours-card">
+                        <div class="cours-info">
+                            <div class="cours-avatar" aria-label="Initiales du cours">
+                                {{ cour.departement }}
+                            </div>
+                            <div class="cours-details">
+                                <span class="cours-nom">{{ cour.intitule }} -{{ cour.credit }}</span>
+                                <div class="cours-meta">
+                                    <span class="cours-badge numens">
+                                        <strong>Numéro:</strong> {{ cour.code_cours }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <span class="enseignant-nom">{{ enseignant.nom }} {{ enseignant.prenom }}</span>
-                            <span class="enseignant-numens">{{ enseignant.numens }}</span>
+                        <div class="btn-actions">
+                            <a href="{% url 'university:cours_update' cour.pk %}" 
+                               class="btn-action btn-modifier"
+                               title="Modifier ce cours"
+                               aria-label="Modifier le cours {{ cour.nom }}">
+                                ✏️ <span>Modifier</span>
+                            </a>
+                            <button class="btn-action btn-supprimer"
+                                    onclick="confirmDelete('{% url 'university:cours_delete' cour.pk %}', '{{ cour.nom }}')"
+                                    title="Supprimer ce cours"
+                                    aria-label="Supprimer le cours {{ cour.nom }}">
+                                🗑️ <span>Supprimer</span>
+                            </button>
                         </div>
-                    </div>
-                    <div class="btn-actions">
-                        <a href="{% url 'university:enseignant_update' enseignant.pk %}" class="btn-modifier">
-                            ✏️ Modifier
-                        </a>
-                        <a href="{% url 'university:enseignant_delete' enseignant.pk %}" class="btn-supprimer">
-                            🗑️ Supprimer
-                        </a>
-                    </div>
-                </li>
-            {% empty %}
-                <li class="empty-msg">
-                    😕 Aucun enseignant pour le moment.
-                </li>
-            {% endfor %}
-        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <!-- État vide -->
+            <div class="empty-state">
+                <div class="empty-icon">📚</div>
+                <div class="empty-title">Aucun cours disponible</div>
+                <p class="empty-text">Il n'y a pas de cours pour le moment. Commencez par en ajouter un.</p>
+                <a href="{% url 'university:cours_create' %}" class="btn-add">
+                    <span>➕</span>
+                    <span>Créer le premier cours</span>
+                </a>
+            </div>
+        {% endif %}
 
-        <div class="nav-links">
-            <a href="{% url 'university:enseignant_list' %}" class="nav-link-custom">👥 Voir les enseignants</a>
-            <a href="{% url 'university:etudiant_list' %}" class="nav-link-custom">🎓 Voir les étudiants</a>
+        <!-- Navigation footer -->
+        <div class="nav-section">
+            <div class="nav-title">Navigation</div>
+            <div class="nav-links">
+                <a href="{% url 'university:enseignant_list' %}" 
+                   class="nav-link"
+                   title="Consulter la liste des enseignants">
+                    <span>👥</span>
+                    <span>Enseignants</span>
+                </a>
+                <a href="{% url 'university:etudiant_list' %}" 
+                   class="nav-link"
+                   title="Consulter la liste des étudiants">
+                    <span>🎓</span>
+                    <span>Étudiants</span>
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS (optionnel, pour certains composants interactifs) -->
+    <!-- Modal de confirmation de suppression -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">⚠️ Confirmer la suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Êtes-vous sûr de vouloir supprimer le cours <strong id="coursName"></strong> ?</p>
+                    <p class="text-muted">Cette action ne peut pas être annulée.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <a id="deleteLink" href="#" class="btn btn-danger">Supprimer définitivement</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script de confirmation -->
+    <script>
+        function confirmDelete(deleteUrl, coursName) {
+            document.getElementById('coursName').textContent = coursName;
+            document.getElementById('deleteLink').href = deleteUrl;
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+
+        // Amélioration de l'accessibilité : fermer la modale avec Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                if (modal) modal.hide();
+            }
+        });
+    </script>
 </body>
 </html>

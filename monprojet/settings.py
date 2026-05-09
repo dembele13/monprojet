@@ -27,9 +27,38 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-MONGODB_URI = 'mongodb://localhost:27017/'  # ou votre URI Atlas
-MONGODB_DB_NAME = 'university_mongo'
-# Application definition
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# ✅ Configuration MongoDB
+MONGODB_URI = os.environ.get(
+    'MONGODB_URI', 
+    'mongodb://localhost:27017/'
+)
+MONGODB_DB_NAME = os.environ.get(
+    'MONGODB_DB_NAME', 
+    'university_db'
+)
+
+# Logging pour MongoDB
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'university.mongo': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',

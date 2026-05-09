@@ -11,7 +11,7 @@ urlpatterns = [
     path('enseignants/<int:pk>/supprimer/', views.EnseignantDeleteView.as_view(), name='enseignant_delete'),
 
     # Cours
-    path('cours/', views.CoursListView.as_view(), name='cours_list'),
+    path('cours/', views.CoursListView.as_view(), name='cour_list'),
     path('cours/ajouter/', views.CoursCreateView.as_view(), name='cours_create'),
     path('cours/<int:pk>/modifier/', views.CoursUpdateView.as_view(), name='cours_update'),
     path('cours/<int:pk>/supprimer/', views.CoursDeleteView.as_view(), name='cours_delete'),
